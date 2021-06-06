@@ -1,6 +1,6 @@
 import logo from './logo.svg';
 import './App.css';
-import { Card, Button, Container, Row, Col, Form, Image } from 'react-bootstrap';
+import { Card, Button, Container, Row, Col, Form, Image, Modal } from 'react-bootstrap';
 import { useState, useEffect } from 'react';
 import ReactCardFlip from 'react-card-flip';
 import creditCard from './image/7.jpeg';
@@ -16,6 +16,7 @@ function App() {
 	const [isFlipped, setIsFlipped] = useState(false);
 	//const [validated, setValidated] = useState(false);
 	const [cvv, setCvv] = useState('');
+	const [show, setShow] = useState(false);
 
 	const [showNumber, setShowNumber] = useState([
 		'#',
@@ -59,6 +60,8 @@ function App() {
 		setCurrentYaer(newYaer);
 	};
 	const handleSubmit = (event) => {
+		event.preventDefault();
+		handleShow();
 		// const form = event.currentTarget;
 		// if (form.checkValidity() === false) {
 		// 	event.preventDefault();
@@ -68,6 +71,8 @@ function App() {
 		console.log(555);
 		//setValidated(true);
 	};
+	const handleClose = () => setShow(false);
+	const handleShow = () => setShow(true);
 
 	const showCvv = (e) => {
 		const re = /^[0-9\b]+$/;
@@ -187,6 +192,9 @@ function App() {
 
 	const handleClick = () => {
 		setIsFlipped(!isFlipped);
+	};
+	const refreshPage = () => {
+		window.location.reload();
 	};
 
 	useEffect(() => {
@@ -389,6 +397,27 @@ function App() {
 						</Card.Body>
 					</Card>
 				</Row>
+				<Modal show={show} onHide={handleClose} backdrop='static' keyboard={false} animation={false}>
+					<Modal.Header closeButton>
+						<Modal.Title>Thank you for submit</Modal.Title>
+					</Modal.Header>
+					<Modal.Body>
+						<p>your card number is {cardNumber}</p>
+						<p>your card name is {cardName}</p>
+						<p>
+							your expiration is {showMonth}/{showYaer}
+						</p>
+						<p>your cvv is {cvv}</p>
+					</Modal.Body>
+					<Modal.Footer>
+						<Button variant='secondary' onClick={handleClose}>
+							Close
+						</Button>
+						<Button variant='primary' onClick={refreshPage}>
+							Confirm
+						</Button>
+					</Modal.Footer>
+				</Modal>
 			</Container>
 		</div>
 	);
